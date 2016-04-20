@@ -32,7 +32,7 @@ Return -1 ,for Invalid Inputs
 
 #include <stdlib.h>
 #include <stdio.h>
-
+int find_min(struct node *temp);
 struct node{
   struct node * left;
   int data;
@@ -41,5 +41,68 @@ struct node{
 
 int get_closest_leaf_distance(struct node *root, struct node *temp)
 {
-  return -1;
+	if ((root == NULL) || (temp == NULL))
+		return -1;
+	int r, r1, count = 0, flag = 0;
+	struct node *t, *prev1=NULL, *prev2=NULL, *t2=NULL;
+	t = temp;
+	r = find_min(temp);
+	temp = t;
+	if (temp != root)
+	{
+		if (root->data>temp->data)
+			flag = 0;
+		else
+			flag = 1;
+		if (flag == 0)
+		{
+			while (root->data>temp->data)
+			{
+				prev1 = root;
+				root = root->left;
+			}
+			t2 = prev1->left;
+		}
+		if (flag != 0)
+		{
+			while (root->data<temp->data)
+			{
+				prev2 = root;
+				root = root->right;
+			}
+			t2 = prev2;
+		}
+		if (flag == 0)
+		{
+			while (t2->data != temp->data)
+			{
+				count++;
+				t2 = t2->right;
+			}
+			r1 = count + find_min(prev1->left);
+		}
+		if (flag != 0)
+		{
+			while (t2->data != temp->data)
+			{
+				count++;
+				t2 = t2->right;
+			}
+			r1 = count + find_min(prev2);
+		}
+		return r<r1 ? r : r1;
+	}
+	return r;
+}
+int find_min(struct node *temp)
+{
+	int min1, min2;
+	if (temp == NULL)
+		return -1;
+	else
+	{
+		min1 = 1 + find_min(temp->left);
+		min2 = 1 + find_min(temp->right);
+		return ((min1 < min2 &&min1 != 0) || min2 == 0) ? min1 : min2;
+	}
 }

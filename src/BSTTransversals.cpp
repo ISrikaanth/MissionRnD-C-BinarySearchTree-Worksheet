@@ -21,15 +21,32 @@ struct node{
 	int data;
 	struct node *right;
 };
-
-
-void inorder(struct node *root, int *arr){
-	
+int x = 0, y = 0, z = 0;
+void inorder(struct node *root, int *arr)
+{
+	if (root!=NULL)
+	{
+		inorder(root->left,arr);
+		arr[x++] = root->data;
+		inorder(root->right,arr);
+	}
 }
-void preorder(struct node *root, int *arr){
-	
+void preorder(struct node *root, int *arr)
+{
+	if (root != NULL)
+	{
+		arr[y++] = root->data;
+		preorder(root->left, arr);
+		preorder(root->right, arr);
+	}
 }
-void postorder(struct node *root, int *arr){
-	
+void postorder(struct node *root, int *arr)
+{
+	if (root != NULL)
+	{
+		preorder(root->left, arr);
+		preorder(root->right, arr);
+		arr[z++] = root->data;
+	}
 }
 
