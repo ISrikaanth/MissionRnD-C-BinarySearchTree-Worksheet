@@ -28,10 +28,45 @@ struct node{
 	int data;
 	struct node *right;
 };
-
-
-
+void right_to_left(struct node *root,int *arr);
+int w = 0;
+int find_height1(struct node *root);
+void store_at_each_level(struct node *root,int i, int *arr);
 int* BSTRighttoLeftRows(struct node* root)
 {
-    return NULL;
+	if (root==NULL)
+		return NULL;
+	int *arr;
+	arr = (int *)malloc(100 * sizeof(int));
+	right_to_left(root,arr);
+	w = 0;
+	return arr;
+}
+void right_to_left(struct node *root,int *arr)
+{
+	int h;
+	h = find_height1(root);
+	for (int i = 1; i <= h; i++)
+		store_at_each_level(root, i, arr);
+}
+int find_height1(struct node *t)
+{
+	int h1, h2;
+	if (t == NULL)
+		return 0;
+	h1 = 1 + find_height1(t->left);
+	h2 = 1 + find_height1(t->right);
+	return h1 > h2 ? h1 : h2;
+}
+void store_at_each_level(struct node *root, int level, int *arr)
+{
+	if (root == NULL)
+		return;
+	if (level == 1)
+		arr[w++] = root->data;
+	else if (level>1)
+	{
+		store_at_each_level(root->right, level -1, arr);
+		store_at_each_level(root->left, level - 1, arr);
+	}
 }
